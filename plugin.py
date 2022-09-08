@@ -199,6 +199,7 @@ def FuturePrice(CurrentHour):
         if each == "values":
             for each in price["areas"][_plugin.Area]["values"]:
                 if hour == CurrentHour:
+                    Domoticz.Log(each["value"])
                     return each["value"]
                     break
                 hour += 1
