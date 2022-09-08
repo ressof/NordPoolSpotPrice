@@ -186,16 +186,16 @@ def TodayPrice():
     Domoticz.Log("Today Price Updated")
 
 def CurrentPrice(CurrentHour):
-#    UpdateDevice(int(27), TodayPriceHour(CurrentHour), str("CurrentPrice"))
+    UpdateDevice(int(27), TodayPriceHour(CurrentHour), str("CurrentPrice"))
     _plugin.CurrentPriceUpdated = True
     Domoticz.Log("Current Price Updated")
-    Domoticz.Log(TodayPriceHour(CurrentHour))
+#    Domoticz.Log(TodayPriceHour(CurrentHour))
     
 def FuturePrice(CurrentHour):
     hour = 0
     prices_spot = elspot.Prices(_plugin.currency)
     price=prices_spot.hourly(areas=[_plugin.Area])
-    for each in price["areas"][_plugin.Area].items():
+    for each,b in price["areas"][_plugin.Area].items():
         if each == "values":
             for each in price["areas"][_plugin.Area]["values"]:
                 if hour == CurrentHour:
@@ -211,7 +211,6 @@ def TodayPriceHour(CurrentHour):
         if each == "values":
             for each in price["areas"][_plugin.Area]["values"]:
                 if hour == CurrentHour:
-                    Domoticz.Log(each["value"])                    
                     return each["value"]
                     break
                 hour += 1
