@@ -9,9 +9,6 @@
         <h2>Support me with a coffee &<a href="https://www.buymeacoffee.com/flopp999">https://www.buymeacoffee.com/flopp999</a></h2><br/>
         <h3>Features</h3>
         <h2>Presentation of data is in kWh and nothing is added eg. TAX, VAT</h2>
-        <ul style="list-style-type:square">
-            <li>..</li>
-        </ul>
         <h3>Configuration</h3>
     </description>
     <params>
@@ -72,7 +69,7 @@ except ImportError as e:
     Package = False
 
 try:
-    from datetime import datetime
+    from datetime import datetime, timedelta
 except ImportError as e:
     Package = False
 
@@ -158,12 +155,20 @@ def onStart():
 
 def TodayPrice():
     hour = 0
+    HourNow = (datetime.now().hour)
     prices_spot = elspot.Prices(_plugin.currency)
     price=prices_spot.hourly(end_date=datetime.now().date(),areas=[_plugin.Area])
 #    Domoticz.Log(str(price))
     for each,b in price["areas"][_plugin.Area].items():
         if each == "values":
             for each in price["areas"][_plugin.Area]["values"]:
+                if hour < HourNow:
+                    FutureHour = FuturePrice(hour)
+                    if FutureHour != "inf":
+                        Domoticz.Log("Hour "+str(hour)+" "+str(round(FutureHour/10.0,1)))
+                        UpdateDevice(int(hour), FutureHour, str("Hour"+" "+str(hour)))
+                    Domoticz.Log("Hour "+str(hour)+" "+str(round(each["value"]/10.0,1)))
+                    UpdateDevice(int(hour), each["value"], str("Hour"+" "+str(hour)))
                 Domoticz.Log("Hour "+str(hour)+" "+str(round(each["value"]/10.0,1)))
                 UpdateDevice(int(hour), each["value"], str("Hour"+" "+str(hour)))
                 hour += 1
@@ -180,17 +185,33 @@ def TodayPrice():
     Domoticz.Log("Today Price Updated")
 
 def CurrentPrice(CurrentHour):
+    UpdateDevice(int(27), TodayPrice(CurrentHour), str("CurrentPrice"))
+    _plugin.CurrentPriceUpdated = True
+    Domoticz.Log("Current Price Updated")
+    
+def FuturePrice(CurrentHour):
     hour = 0
     prices_spot = elspot.Prices(_plugin.currency)
-    price=prices_spot.hourly(end_date=datetime.now().date(),areas=[_plugin.Area])
-    for each,b in price["areas"][_plugin.Area].items():
+    price=prices_spot.hourly(areas=[_plugin.Area])
+    for each in price["areas"][_plugin.Area].items():
         if each == "values":
             for each in price["areas"][_plugin.Area]["values"]:
                 if hour == CurrentHour:
-                    UpdateDevice(int(27), each["value"], str("CurrentPrice"))
+                    return each["value"]
+                    break
                 hour += 1
-    _plugin.CurrentPriceUpdated = True
-    Domoticz.Log("Current Price Updated")
+                
+def TodayPrice(CurrentHour):
+    hour = 0
+    prices_spot = elspot.Prices(_plugin.currency)
+    price=prices_spot.hourly(areas=[_plugin.Area])
+    for each in price["areas"][_plugin.Area].items():
+        if each == "values":
+            for each in price["areas"][_plugin.Area]["values"]:
+                if hour == CurrentHour:
+                    return each["value"]
+                    break
+                hour += 1
 
 def UpdateDevice(PID, sValue, Name):
     Design="a"
