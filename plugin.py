@@ -141,10 +141,10 @@ class BasePlugin:
                 self.CurrentPriceUpdated = False
 
 #            if HourNow >= 0 and MinuteNow >= 2 and MinuteNow < 59 and self.TodayPriceUpdated is False:
-            if MinuteNow == 18 and self.TodayPriceUpdated is False:
+            if MinuteNow == 21 and self.TodayPriceUpdated is False:
                 TodayPrice()
 
-            if MinuteNow == 19 and self.TodayPriceUpdated is True:
+            if MinuteNow == 22 and self.TodayPriceUpdated is True:
                 self.TodayPriceUpdated = False
 
 global _plugin
@@ -165,7 +165,7 @@ def TodayPrice():
             for each in price["areas"][_plugin.Area]["values"]:
                 if hour < HourNow:
                     FutureHour = FuturePrice(hour)
-                    if FutureHour != "inf":
+                    if FutureHour != 'inf':
                         Domoticz.Log("Hour "+str(hour)+" "+str(round(FutureHour/10.0,1)))
                         UpdateDevice(int(hour), FutureHour, str("Hour"+" "+str(hour)))
                     else:
