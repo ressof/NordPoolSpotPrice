@@ -186,9 +186,10 @@ def TodayPrice():
     Domoticz.Log("Today Price Updated")
 
 def CurrentPrice(CurrentHour):
-    UpdateDevice(int(27), TodayPrice(CurrentHour), str("CurrentPrice"))
+#    UpdateDevice(int(27), TodayPrice(CurrentHour), str("CurrentPrice"))
     _plugin.CurrentPriceUpdated = True
-    Domoticz.Log("Current Price Updated")
+#    Domoticz.Log("Current Price Updated")
+    Domoticz.Log(TodayPrice(CurrentHour))
     
 def FuturePrice(CurrentHour):
     hour = 0
