@@ -195,7 +195,7 @@ def FuturePrice(CurrentHour):
     hour = 0
     prices_spot = elspot.Prices(_plugin.currency)
     price=prices_spot.hourly(areas=[_plugin.Area])
-    for each in price["areas"][_plugin.Area].items():
+    for each,b in price["areas"][_plugin.Area].items():
         if each == "values":
             for each in price["areas"][_plugin.Area]["values"]:
                 if hour == CurrentHour:
