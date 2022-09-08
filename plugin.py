@@ -141,10 +141,10 @@ class BasePlugin:
                 self.CurrentPriceUpdated = False
 
 #            if HourNow >= 0 and MinuteNow >= 2 and MinuteNow < 59 and self.TodayPriceUpdated is False:
-            if MinuteNow == 2 and self.TodayPriceUpdated is False:
+            if MinuteNow == 13 and self.TodayPriceUpdated is False:
                 TodayPrice()
 
-            if MinuteNow == 3 and self.TodayPriceUpdated is True:
+            if MinuteNow == 14 and self.TodayPriceUpdated is True:
                 self.TodayPriceUpdated = False
 
 global _plugin
