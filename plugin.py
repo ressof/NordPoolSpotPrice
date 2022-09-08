@@ -165,7 +165,6 @@ def TodayPrice():
             for each in price["areas"][_plugin.Area]["values"]:
                 if hour < HourNow:
                     FutureHour = FuturePrice(hour)
-                    Domoticz.Log("+++++++++"+str(FutureHour))
                     if str(FutureHour) != 'inf':
                         Domoticz.Log("Hour "+str(hour)+" "+str(round(FutureHour/10.0,1)))
                         UpdateDevice(int(hour), FutureHour, str("Hour"+" "+str(hour)))
